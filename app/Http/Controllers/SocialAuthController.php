@@ -6,15 +6,20 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use App\SocialAccountService;
+use Socialite;
 class SocialAuthController extends Controller
 {
     public function redirect()
     {
-        return \Socialite::driver('facebook')->redirect();
+        return Socialite::driver('facebook')->redirect();
     }
 
     public function callback()
     {
-        $providerUser = \Socialite::driver('facebook')->user(); 
+        //$providerUser = \Socialite::driver('facebook')->user();
+        $user = $service->createOrGetUser(Socialite::driver('facebook')->user());
+        auth()->login($user);
+        return redirect()->to('/home');
     }
 }
